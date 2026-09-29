@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { IonBackButton, IonBadge, IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonSelect, IonSelectOption, IonTitle, IonToolbar } from '@ionic/angular';
@@ -12,7 +12,7 @@ import { StorageService } from '../../services/storage.service';
 @Component({ selector: 'app-history', standalone: true, imports: [DatePipe, FormsModule, IonBackButton, IonBadge, IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonSelect, IonSelectOption, IonTitle, IonToolbar], templateUrl: './history.page.html', styleUrl: './history.page.scss' })
 export class HistoryPage implements OnInit {
   messages: SecureMessageRecord[] = []; search = ''; sort = 'newest';
-  constructor(private storage: StorageService, private context: QrContextService, private router: Router) { addIcons({ lockClosedOutline, searchOutline, trashOutline }); }
+  constructor(private storage: StorageService, private context: QrContextService, private router: Router, private changeDetector: ChangeDetectorRef) { addIcons({ lockClosedOutline, searchOutline, trashOutline }); }
   async ngOnInit(): Promise<void> { await this.load(); }
   get filtered(): SecureMessageRecord[] {
     const query = this.search.toLowerCase();
@@ -22,5 +22,5 @@ export class HistoryPage implements OnInit {
   open(item: SecureMessageRecord): void { this.context.set(item.payload); void this.router.navigateByUrl('/decrypt'); }
   async remove(event: Event, id: string): Promise<void> { event.stopPropagation(); await this.storage.deleteMessage(id); await this.load(); }
   async clear(): Promise<void> { if (window.confirm('Delete all encrypted history records?')) { await this.storage.clearHistory(); await this.load(); } }
-  private async load(): Promise<void> { this.messages = await this.storage.getMessages(); }
+  private async load(): Promise<void> { this.messages = await this.storage.getMessages(); this.changeDetector.detectChanges(); }
 }

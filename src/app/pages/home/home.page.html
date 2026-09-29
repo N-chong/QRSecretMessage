@@ -1,11 +1,15 @@
-<ion-header class="ion-no-border"><ion-toolbar><ion-title><ion-icon name="shield-checkmark-outline"></ion-icon> QRSecure</ion-title><ion-button slot="end" fill="clear" routerLink="/settings" aria-label="Settings"><ion-icon slot="icon-only" name="settings-outline"></ion-icon></ion-button><ion-button slot="end" fill="clear" (click)="lock()" aria-label="Lock"><ion-icon slot="icon-only" name="lock-closed-outline"></ion-icon></ion-button></ion-toolbar></ion-header>
-<ion-content [fullscreen]="true"><main class="page-shell">
-  <section class="hero"><span>PRIVATE • OFFLINE • ENCRYPTED</span><h1>Share secrets,<br>not compromises.</h1><p>Create encrypted QR messages that only the right password can open.</p></section>
-  <section class="action-grid">
-    <a class="action primary" routerLink="/create"><ion-icon name="add-circle-outline"></ion-icon><div><strong>Create Secret QR</strong><small>Encrypt a new message</small></div></a>
-    <a class="action" routerLink="/scan"><ion-icon name="camera-outline"></ion-icon><div><strong>Scan QR</strong><small>Use your camera</small></div></a>
-    <a class="action" routerLink="/upload"><ion-icon name="cloud-upload-outline"></ion-icon><div><strong>Upload QR</strong><small>Choose an image</small></div></a>
-    <a class="action" routerLink="/history"><ion-icon name="time-outline"></ion-icon><div><strong>History</strong><small>Encrypted records only</small></div></a>
+<ion-header class="ion-no-border"><ion-toolbar><ion-title><span class="brand-slash">///</span> QRSecure</ion-title><ion-button slot="end" fill="clear" routerLink="/settings" aria-label="Settings"><ion-icon slot="icon-only" name="settings-outline"></ion-icon></ion-button><ion-button slot="end" fill="clear" (click)="lock()" aria-label="Lock"><ion-icon slot="icon-only" name="lock-closed-outline"></ion-icon></ion-button></ion-toolbar></ion-header>
+<ion-content [fullscreen]="true"><main class="page-shell home-shell">
+  <section class="hero">
+    <div class="hero-copy"><span class="signal-label">SECURE CHANNEL / 256</span><h1>SECRETS<br><em>IN PLAIN</em><br>SIGHT.</h1><p>Encrypt the message. Print the signal. Share the password somewhere else.</p><div class="hero-tags"><b>AES–GCM</b><b>OFFLINE</b><b>ZERO CLOUD</b></div></div>
+    <div class="signal-art" aria-hidden="true"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="signal-core"><ion-icon name="shield-checkmark-outline"></ion-icon></div><span class="coordinate top">13° SECURE</span><span class="coordinate bottom">LOCAL://ONLY</span></div>
   </section>
-  <aside><ion-icon name="lock-closed-outline"></ion-icon><div><strong>Zero-knowledge local design</strong><p>Passwords and plaintext are never stored in history.</p></div></aside>
+  <div class="section-ribbon"><span>CHOOSE AN OPERATION</span><b>01—04</b></div>
+  <section class="action-grid">
+    <a class="action action-create" routerLink="/create"><span class="action-index">01</span><ion-icon name="add-circle-outline"></ion-icon><div><strong>CREATE<br>SECRET QR</strong><small>Encrypt a new transmission</small></div><i>↗</i></a>
+    <a class="action action-scan" routerLink="/scan"><span class="action-index">02</span><ion-icon name="camera-outline"></ion-icon><div><strong>SCAN<br>THE SIGNAL</strong><small>Open the live camera</small></div><i>↗</i></a>
+    <a class="action action-upload" routerLink="/upload"><span class="action-index">03</span><ion-icon name="cloud-upload-outline"></ion-icon><div><strong>IMPORT<br>AN IMAGE</strong><small>Decode from the gallery</small></div><i>↗</i></a>
+    <a class="action action-history" routerLink="/history"><span class="action-index">04</span><ion-icon name="time-outline"></ion-icon><div><strong>ENCRYPTED<br>ARCHIVE</strong><small>Metadata, never plaintext</small></div><i>↗</i></a>
+  </section>
+  <aside class="security-marquee"><span class="marquee-icon"><ion-icon name="lock-closed-outline"></ion-icon></span><div><small>LOCAL SECURITY NOTICE</small><strong>Passwords stay in your head. Plaintext stays out of history.</strong></div><b>NO.01</b></aside>
 </main></ion-content>

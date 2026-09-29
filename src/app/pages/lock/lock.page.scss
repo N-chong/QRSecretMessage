@@ -1,8 +1,11 @@
-.lock-content { --background: radial-gradient(circle at top, #123c55, #071a2b 62%); }
-.lock-shell { min-height: 100%; display: grid; place-content: center; justify-items: center; padding: 28px; color: white; text-align: center; }
-.brand-mark { width: 84px; height: 84px; border-radius: 25px; display: grid; place-items: center; background: linear-gradient(145deg, #2dd4bf, #0ea5e9); box-shadow: 0 20px 45px #0008; }
-.brand-mark ion-icon { font-size: 48px; } h1 { margin: 18px 0 4px; font-size: 2rem; } .subtitle, .privacy { color: #b8cfdd; }
-.lock-card { width: min(380px, 88vw); padding: 18px; border-radius: 22px; background: #ffffff10; border: 1px solid #ffffff28; backdrop-filter: blur(18px); }
-ion-item { --background: transparent; --color: white; --border-color: #ffffff33; margin-bottom: 12px; } ion-button { margin-top: 14px; }
-.fingerprint { width: 108px; height: 108px; --border-radius: 50%; --background: #ffffff10; } .fingerprint ion-icon { font-size: 70px; color: #5eead4; }
-.small-lock { font-size: 40px; color: #5eead4; } .error { display: block; margin-top: 16px; max-width: 340px; } .privacy { margin-top: 32px; font-size: .8rem; }
+.lock-content { --background: #dfe7de; background-image: repeating-linear-gradient(45deg,transparent 0 18px,#adc8d33d 18px 21px),radial-gradient(circle at 85% 10%,#dca18f80 0 12%,transparent 12%); }
+.lock-shell { min-height: 100%; display: grid; place-content: center; justify-items: center; padding: 34px 24px; color: var(--text); text-align: center; position: relative; }
+.lock-shell::before,.lock-shell::after { position: absolute; font: 900 .65rem var(--mono); letter-spacing: .16em; background: var(--text); color: var(--acid); padding: 7px 10px; }.lock-shell::before { content:'AUTH GATE / 00'; left:18px; top:18px; }.lock-shell::after { content:'LOCAL DEVICE'; right:18px; bottom:18px; transform:rotate(-2deg); }
+.brand-mark { width: 92px; height: 92px; border-radius: 50%; display: grid; place-items: center; background: var(--violet); color: white; border: 5px solid var(--text); box-shadow: 8px 8px 0 var(--hot); transform: rotate(-5deg); }
+.brand-mark ion-icon { font-size: 52px; } h1 { margin: 25px 0 2px; font: 900 3.2rem/.9 var(--display); text-transform: uppercase; letter-spacing: -.08em; text-shadow: 4px 4px 0 white; } .subtitle { color: var(--text); font: 900 .72rem var(--mono); letter-spacing:.08em; text-transform:uppercase; }.privacy { color:var(--text); background:white; border:2px solid var(--text); padding:5px 8px; }
+.lock-card { width: min(400px, 88vw); padding: 22px; border-radius: 3px; background: var(--surface); color:var(--text); border: 4px solid var(--text); box-shadow: 10px 10px 0 var(--violet); }
+.lock-card h2 { font-family:var(--display); text-transform:uppercase; } .lock-card p { font-weight:700; }
+ion-item { --background: transparent; --color: var(--text); --border-color: var(--text); margin-bottom: 12px; } ion-button { margin-top: 14px; }
+.fingerprint { width: 118px; height: 118px; --border-radius: 50%; --background: var(--text); border:4px solid var(--text); box-shadow:7px 7px 0 var(--hot); } .fingerprint ion-icon { font-size: 72px; color: var(--acid); }
+.small-lock { font-size: 42px; color: var(--violet); } .error { display: block; margin-top: 20px; max-width: 360px; background:white; border:3px solid #ef4444; padding:8px; box-shadow:4px 4px 0 #ef4444; } .privacy { margin-top: 34px; font-size: .72rem; }
+@media(max-width:430px){.lock-shell::before,.lock-shell::after{font-size:.52rem}.lock-card{padding:16px}h1{font-size:2.7rem}}

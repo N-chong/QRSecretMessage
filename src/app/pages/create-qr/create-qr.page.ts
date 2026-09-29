@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IonBackButton, IonButton, IonButtons, IonContent, IonDatetime, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonNote, IonSelect, IonSelectOption, IonTextarea, IonTitle, IonToggle, IonToolbar } from '@ionic/angular';
 import { addIcons } from 'ionicons';
@@ -15,11 +15,12 @@ export class CreateQrPage {
   title = ''; message = ''; password = ''; confirmPassword = ''; showPassword = false;
   expiration = 'none'; customExpiration = ''; oneTime = false; busy = false; error = ''; success = '';
   qrDataUrl = ''; encryptedJson = '';
-  constructor(private encryption: EncryptionService, private qr: QrService, private storage: StorageService, private share: ShareService) { addIcons({ checkmarkCircleOutline, copyOutline, downloadOutline, eyeOffOutline, eyeOutline, shareSocialOutline }); }
+  constructor(private encryption: EncryptionService, private qr: QrService, private storage: StorageService, private share: ShareService, private changeDetector: ChangeDetectorRef) { addIcons({ checkmarkCircleOutline, copyOutline, downloadOutline, eyeOffOutline, eyeOutline, shareSocialOutline }); }
   get strength(): PasswordStrength { return passwordStrength(this.password); }
   async encrypt(): Promise<void> {
     this.error = ''; this.success = '';
     if (!this.message.trim()) { this.error = 'Please enter a message.'; return; }
+    if (new TextEncoder().encode(this.message).length > 1_200) { this.error = 'Message is too long for a reliable QR code. Use 1,200 bytes or fewer.'; return; }
     if (this.password.length < 8) { this.error = 'Use a message password with at least 8 characters.'; return; }
     if (this.password !== this.confirmPassword) { this.error = 'Passwords do not match.'; return; }
     this.busy = true;
@@ -31,16 +32,19 @@ export class CreateQrPage {
       await this.storage.saveMessage(record);
       this.message = ''; this.password = ''; this.confirmPassword = '';
     } catch { this.error = 'Unable to generate QR code.'; }
-    finally { this.busy = false; }
+    finally { this.busy = false; this.refreshView(); }
   }
-  async copyJson(): Promise<void> { await this.share.copy(this.encryptedJson); this.success = 'Encrypted JSON copied.'; }
-  async save(): Promise<void> { try { await this.share.saveQr(this.qrDataUrl); this.success = 'QR image saved to Documents.'; } catch { this.error = 'Unable to save QR image.'; } }
-  async shareQr(): Promise<void> { try { await this.share.shareQr(this.qrDataUrl); } catch { this.error = 'Unable to share QR image.'; } }
+  async copyJson(): Promise<void> { await this.share.copy(this.encryptedJson); this.success = 'Encrypted JSON copied.'; this.refreshView(); }
+  async save(): Promise<void> { try { await this.share.saveQr(this.qrDataUrl); this.success = 'QR image saved to Documents.'; } catch { this.error = 'Unable to save QR image.'; } finally { this.refreshView(); } }
+  async shareQr(): Promise<void> { try { await this.share.shareQr(this.qrDataUrl); } catch { this.error = 'Unable to share QR image.'; } finally { this.refreshView(); } }
   reset(): void { this.qrDataUrl = ''; this.encryptedJson = ''; this.title = ''; this.expiration = 'none'; this.oneTime = false; this.success = ''; }
   private expirationDate(): string | null {
     const durations: Record<string, number> = { '1hour': 3_600_000, '24hours': 86_400_000, '7days': 604_800_000 };
     if (this.expiration === 'none') return null;
     if (this.expiration === 'custom') return this.customExpiration ? new Date(this.customExpiration).toISOString() : null;
     return new Date(Date.now() + durations[this.expiration]).toISOString();
+  }
+  private refreshView(): void {
+    if (!(this.changeDetector as unknown as { destroyed?: boolean }).destroyed) this.changeDetector.detectChanges();
   }
 }
