@@ -1,9 +1,11 @@
 <ion-content class="lock-content" [fullscreen]="true">
   <main class="lock-shell">
     <div class="brand-mark"><ion-icon name="shield-checkmark-outline"></ion-icon></div>
-    <h1>QRSecure</h1><p class="subtitle">{{ setup ? 'Protect this app with a PIN' : 'Unlock to continue' }}</p>
+    <h1>QRSecure</h1><p class="subtitle">{{ busy ? 'Checking secure lock…' : (setup ? 'Protect this app with a PIN' : 'Unlock to continue') }}</p>
     @if (busy) { <ion-spinner name="crescent"></ion-spinner> }
-    @else if (setup) {
+    @else if (initializationFailed) {
+      <section class="lock-card"><ion-icon class="small-lock" name="lock-closed-outline"></ion-icon><h2>Unable to load the secure lock</h2><p>QRSecure remains locked. Check the error below, then try again.</p><ion-button expand="block" (click)="initializeLock()">Retry</ion-button></section>
+    } @else if (setup) {
       <section class="lock-card">
         <ion-item><ion-input label="Create a 4 or 6 digit PIN" labelPlacement="stacked" type="password" inputmode="numeric" maxlength="6" [(ngModel)]="pin"></ion-input></ion-item>
         <ion-item><ion-input label="Confirm PIN" labelPlacement="stacked" type="password" inputmode="numeric" maxlength="6" [(ngModel)]="confirmPin"></ion-input></ion-item>

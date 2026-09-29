@@ -13,26 +13,28 @@ export class AuthService {
   private failedAttempts = 0;
   private retryAfter = 0;
   private backgroundAt: number | null = null;
-  private readonly secureReady = SecureStorage.setKeyPrefix('qrsecure_');
 
   constructor(private router: Router) {}
 
   isAuthenticated(): boolean { return this.auth(); }
-  async hasPin(): Promise<boolean> { await this.secureReady; return (await SecureStorage.get(this.pinKey)) !== null; }
+  async hasPin(): Promise<boolean> {
+    await SecureStorage.setKeyPrefix('qrsecure_');
+    return (await this.withTimeout(SecureStorage.get(this.pinKey))) !== null;
+  }
 
   async setupPin(pin: string): Promise<void> {
-    await this.secureReady;
+    await SecureStorage.setKeyPrefix('qrsecure_');
     if (!isValidPin(pin)) throw new Error('PIN must contain exactly 4 or 6 digits.');
     const salt = crypto.getRandomValues(new Uint8Array(16));
     const iterations = 210_000;
     const hash = await this.hashPin(pin, salt, iterations);
-    await SecureStorage.set(this.pinKey, { salt: bytesToBase64(salt), hash: bytesToBase64(hash), iterations });
+    await this.withTimeout(SecureStorage.set(this.pinKey, { salt: bytesToBase64(salt), hash: bytesToBase64(hash), iterations }));
   }
 
   async verifyPin(pin: string): Promise<boolean> {
-    await this.secureReady;
+    await SecureStorage.setKeyPrefix('qrsecure_');
     if (Date.now() < this.retryAfter) throw new Error(`Try again in ${Math.ceil((this.retryAfter - Date.now()) / 1000)} seconds.`);
-    const stored = await SecureStorage.get(this.pinKey) as PinRecord | null;
+    const stored = await this.withTimeout(SecureStorage.get(this.pinKey)) as PinRecord | null;
     if (!stored) return false;
     const actual = await this.hashPin(pin, base64ToBytes(stored.salt), stored.iterations);
     const expected = base64ToBytes(stored.hash);
@@ -70,5 +72,14 @@ export class AuthService {
       { name: 'PBKDF2', hash: 'SHA-256', salt: salt as BufferSource, iterations }, material, 256,
     );
     return new Uint8Array(bits);
+  }
+
+  private async withTimeout<T>(operation: Promise<T>, milliseconds = 8_000): Promise<T> {
+    let timeoutId: ReturnType<typeof setTimeout> | undefined;
+    const timeout = new Promise<never>((_, reject) => {
+      timeoutId = setTimeout(() => reject(new Error('Secure storage is not responding. Please restart QRSecure and try again.')), milliseconds);
+    });
+    try { return await Promise.race([operation, timeout]); }
+    finally { if (timeoutId) clearTimeout(timeoutId); }
   }
 }
