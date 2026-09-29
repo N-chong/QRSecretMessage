@@ -1,0 +1,8 @@
+.lock-content { --background: radial-gradient(circle at top, #123c55, #071a2b 62%); }
+.lock-shell { min-height: 100%; display: grid; place-content: center; justify-items: center; padding: 28px; color: white; text-align: center; }
+.brand-mark { width: 84px; height: 84px; border-radius: 25px; display: grid; place-items: center; background: linear-gradient(145deg, #2dd4bf, #0ea5e9); box-shadow: 0 20px 45px #0008; }
+.brand-mark ion-icon { font-size: 48px; } h1 { margin: 18px 0 4px; font-size: 2rem; } .subtitle, .privacy { color: #b8cfdd; }
+.lock-card { width: min(380px, 88vw); padding: 18px; border-radius: 22px; background: #ffffff10; border: 1px solid #ffffff28; backdrop-filter: blur(18px); }
+ion-item { --background: transparent; --color: white; --border-color: #ffffff33; margin-bottom: 12px; } ion-button { margin-top: 14px; }
+.fingerprint { width: 108px; height: 108px; --border-radius: 50%; --background: #ffffff10; } .fingerprint ion-icon { font-size: 70px; color: #5eead4; }
+.small-lock { font-size: 40px; color: #5eead4; } .error { display: block; margin-top: 16px; max-width: 340px; } .privacy { margin-top: 32px; font-size: .8rem; }

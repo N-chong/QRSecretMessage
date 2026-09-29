@@ -1,0 +1,28 @@
+<ion-content class="lock-content" [fullscreen]="true">
+  <main class="lock-shell">
+    <div class="brand-mark"><ion-icon name="shield-checkmark-outline"></ion-icon></div>
+    <h1>QRSecure</h1><p class="subtitle">{{ setup ? 'Protect this app with a PIN' : 'Unlock to continue' }}</p>
+    @if (busy) { <ion-spinner name="crescent"></ion-spinner> }
+    @else if (setup) {
+      <section class="lock-card">
+        <ion-item><ion-input label="Create a 4 or 6 digit PIN" labelPlacement="stacked" type="password" inputmode="numeric" maxlength="6" [(ngModel)]="pin"></ion-input></ion-item>
+        <ion-item><ion-input label="Confirm PIN" labelPlacement="stacked" type="password" inputmode="numeric" maxlength="6" [(ngModel)]="confirmPin"></ion-input></ion-item>
+        @if (biometricAvailable) { <ion-item lines="none"><ion-toggle [(ngModel)]="enableBiometric">Enable fingerprint</ion-toggle></ion-item> }
+        <ion-button expand="block" (click)="completeSetup()">Secure QRSecure</ion-button>
+      </section>
+    } @else if (!pinMode) {
+      <ion-button class="fingerprint" fill="clear" (click)="authenticateBiometric()"><ion-icon slot="icon-only" name="finger-print-outline"></ion-icon></ion-button>
+      <p>Authenticate with fingerprint</p>
+      <ion-button fill="outline" (click)="pinMode = true">Use PIN Instead</ion-button>
+    } @else {
+      <section class="lock-card">
+        <ion-icon class="small-lock" name="lock-closed-outline"></ion-icon>
+        <ion-item><ion-input label="Enter PIN" labelPlacement="stacked" type="password" inputmode="numeric" maxlength="6" [(ngModel)]="pin" (keyup.enter)="unlockPin()"></ion-input></ion-item>
+        <ion-button expand="block" (click)="unlockPin()">Unlock</ion-button>
+        @if (biometricAvailable) { <ion-button fill="clear" (click)="pinMode = false; authenticateBiometric()">Use Fingerprint</ion-button> }
+      </section>
+    }
+    @if (error) { <ion-note color="danger" class="error">{{ error }}</ion-note> }
+    <p class="privacy">Your messages stay on this device.</p>
+  </main>
+</ion-content>

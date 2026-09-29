@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">QRSecure</string>
+    <string name="title_activity_main">QRSecure</string>
+    <string name="package_name">com.qrsecure.app</string>
+    <string name="custom_url_scheme">com.qrsecure.app</string>
+</resources>

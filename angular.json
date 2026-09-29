@@ -34,6 +34,7 @@
               }
             ],
             "styles": ["src/global.scss", "src/theme/variables.scss"],
+            "allowedCommonJsDependencies": ["qrcode", "jsqr"],
             "scripts": [],
             "browser": "src/main.ts"
           },

@@ -1,0 +1,11 @@
+<ion-header class="ion-no-border"><ion-toolbar><ion-title><ion-icon name="shield-checkmark-outline"></ion-icon> QRSecure</ion-title><ion-button slot="end" fill="clear" routerLink="/settings" aria-label="Settings"><ion-icon slot="icon-only" name="settings-outline"></ion-icon></ion-button><ion-button slot="end" fill="clear" (click)="lock()" aria-label="Lock"><ion-icon slot="icon-only" name="lock-closed-outline"></ion-icon></ion-button></ion-toolbar></ion-header>
+<ion-content [fullscreen]="true"><main class="page-shell">
+  <section class="hero"><span>PRIVATE • OFFLINE • ENCRYPTED</span><h1>Share secrets,<br>not compromises.</h1><p>Create encrypted QR messages that only the right password can open.</p></section>
+  <section class="action-grid">
+    <a class="action primary" routerLink="/create"><ion-icon name="add-circle-outline"></ion-icon><div><strong>Create Secret QR</strong><small>Encrypt a new message</small></div></a>
+    <a class="action" routerLink="/scan"><ion-icon name="camera-outline"></ion-icon><div><strong>Scan QR</strong><small>Use your camera</small></div></a>
+    <a class="action" routerLink="/upload"><ion-icon name="cloud-upload-outline"></ion-icon><div><strong>Upload QR</strong><small>Choose an image</small></div></a>
+    <a class="action" routerLink="/history"><ion-icon name="time-outline"></ion-icon><div><strong>History</strong><small>Encrypted records only</small></div></a>
+  </section>
+  <aside><ion-icon name="lock-closed-outline"></ion-icon><div><strong>Zero-knowledge local design</strong><p>Passwords and plaintext are never stored in history.</p></div></aside>
+</main></ion-content>

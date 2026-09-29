@@ -1,0 +1,23 @@
+<ion-header class="ion-no-border"><ion-toolbar><ion-buttons slot="start"><ion-back-button defaultHref="/home"></ion-back-button></ion-buttons><ion-title>Create Secret QR</ion-title></ion-toolbar></ion-header>
+<ion-content><main class="page-shell narrow">
+@if (!qrDataUrl) {
+  <section class="page-intro"><span>ENCRYPT</span><h1>Turn a secret into a secure QR.</h1><p>The message password is never placed in the QR. Share it through a separate channel.</p></section>
+  <div class="form-card">
+    <ion-item><ion-input label="Message title" labelPlacement="stacked" placeholder="Private Message" [(ngModel)]="title"></ion-input></ion-item>
+    <ion-item><ion-textarea label="Secret message" labelPlacement="stacked" placeholder="Type the message to encrypt…" autoGrow="true" rows="5" [(ngModel)]="message"></ion-textarea></ion-item>
+    <ion-item><ion-input label="Message password" labelPlacement="stacked" [type]="showPassword ? 'text' : 'password'" [(ngModel)]="password"></ion-input><ion-button slot="end" fill="clear" (click)="showPassword = !showPassword" aria-label="Show password"><ion-icon slot="icon-only" [name]="showPassword ? 'eye-off-outline' : 'eye-outline'"></ion-icon></ion-button></ion-item>
+    @if (password) { <div class="strength" [class]="strength.toLowerCase()"><span></span><span></span><span></span><strong>{{ strength }}</strong></div> }
+    <ion-item><ion-input label="Confirm password" labelPlacement="stacked" [type]="showPassword ? 'text' : 'password'" [(ngModel)]="confirmPassword"></ion-input></ion-item>
+    <ion-item><ion-select label="Expiration" labelPlacement="stacked" [(ngModel)]="expiration"><ion-select-option value="none">No expiration</ion-select-option><ion-select-option value="1hour">1 hour</ion-select-option><ion-select-option value="24hours">24 hours</ion-select-option><ion-select-option value="7days">7 days</ion-select-option><ion-select-option value="custom">Custom</ion-select-option></ion-select></ion-item>
+    @if (expiration === 'custom') { <ion-datetime presentation="date-time" [min]="''" [(ngModel)]="customExpiration"></ion-datetime> }
+    <ion-item lines="none"><ion-toggle [(ngModel)]="oneTime"><ion-label>One-time mode<small>Enforced locally on each device</small></ion-label></ion-toggle></ion-item>
+    <ion-button expand="block" size="large" [disabled]="busy" (click)="encrypt()">{{ busy ? 'Encrypting…' : 'Encrypt & Generate QR' }}</ion-button>
+  </div>
+} @else {
+  <section class="result"><ion-icon name="checkmark-circle-outline"></ion-icon><h1>Encrypted and ready</h1><p>Send the password separately. It is not included in this QR.</p><div class="qr-frame"><img [src]="qrDataUrl" alt="Encrypted QRSecure QR code"></div>
+    <div class="result-actions"><ion-button (click)="save()"><ion-icon slot="start" name="download-outline"></ion-icon>Save</ion-button><ion-button (click)="shareQr()"><ion-icon slot="start" name="share-social-outline"></ion-icon>Share</ion-button><ion-button fill="outline" (click)="copyJson()"><ion-icon slot="start" name="copy-outline"></ion-icon>Copy JSON</ion-button></div>
+    <ion-button fill="clear" (click)="reset()">Create another</ion-button>
+  </section>
+}
+@if (error) { <ion-note color="danger" class="notice">{{ error }}</ion-note> } @if (success) { <ion-note color="success" class="notice">{{ success }}</ion-note> }
+</main></ion-content>
